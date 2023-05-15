@@ -1,22 +1,31 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 
 import Logo from '../../olx-logo.png';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseContext } from '../../Store/firebase';
+import { AuthContext, FirebaseContext } from '../../Store/firebase';
+
 
 
 function Login() {
 
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
-  const {db,auth}=useContext(FirebaseContext)
+  const {auth}=useContext(FirebaseContext)
+  const navigate=useNavigate()
+  const {user}=useContext(AuthContext)
+  useEffect(()=>{
+    if(user){
+      navigate('/')
+    }
+  })
   const handleSignin=(e)=>{
     e.preventDefault()
     try{
       signInWithEmailAndPassword(auth,email,password).then((userData)=>{
         console.log(userData.user.uid);
+        navigate('/')
       }).catch((err)=>{
         if('auth/invalid-email'===err.code){
           console.log("error");

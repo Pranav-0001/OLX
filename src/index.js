@@ -3,18 +3,23 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 import { FirebaseContext } from './Store/firebase';
-import { db,auth } from './Firebase/config';
-
+import { db, auth ,storage } from './Firebase/config';
+import Context from './Store/firebase';
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-  <FirebaseContext.Provider value={{db,auth}}>
-    <App />
-    </FirebaseContext.Provider>
-   
+    <Context>
+      <FirebaseContext.Provider value={{ db, auth ,storage }}>
+
+        <App />
+
+
+      </FirebaseContext.Provider>
+    </Context>
+
   </React.StrictMode>
 );
 

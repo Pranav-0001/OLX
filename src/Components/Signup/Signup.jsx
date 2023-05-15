@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   // signInWithEmailAndPassword,
   // onAuthStateChanged,
+  updateProfile
 } from "firebase/auth";
 import { addDoc, collection } from 'firebase/firestore';
 
@@ -27,12 +28,15 @@ export default function Signup() {
     e.preventDefault()
     try{
       createUserWithEmailAndPassword(auth,email,password).then((result)=>{
-        addDoc(collection(db,'users'),{
-          id:result.user.uid,
-          profileName:username,
-          phone:phone
-        }).then(()=>{
-          navigate('/login')
+        
+       updateProfile(result.user,{displayName:username}).then(()=>{
+          addDoc(collection(db,'users'),{
+            id:result.user.uid,
+            profileName:username,
+            phone:phone
+          }).then(()=>{
+            navigate('/login')
+          }) 
         })
       })
     }catch(err){
